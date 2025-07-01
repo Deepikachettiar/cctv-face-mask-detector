@@ -1,48 +1,52 @@
-from flask import Flask,render_template,Response,jsonify
-from flask_sqlalchemy import SQLAlchemy
-app=Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI']="sqlite:///project.db"
-db=SQLAlchemy(app)
+from flask import Flask, render_template, Response, jsonify,request
+import os
+from datetime import datetime
+
+app = Flask(__name__)
+uploadf='static/uploads/'
+app.config['uploadf'] = uploadf
+
+os.makedirs(uploadf, exist_ok=True)
 
 @app.route('/')
 def index():
     """Main page"""
     return render_template('index.html')
 
-@app.route('/video_feed')
-def video_feed():
-    """Video streaming route"""
-    return Response(generate_frames(),
-                   mimetype='multipart/x-mixed-replace; boundary=frame')
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    if 'file' not in request.files:
+        return 'No file part'
+    file = request.files['file']
+
+    if file.filename == '':
+        return 'No selected file'
+
+    if file:
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        file.save(filepath)
+        return f'File uploaded! <br> <img src="/{filepath}" width="300">'
+    
+    return 'Something went wrong'
+
 
 @app.route('/start_detection')
 def start_detection():
-    """Start face mask detection"""
+    #Start face mask detection
     global detection_active
     detection_active = True
     return jsonify({"status": "Detection started"})
 
 @app.route('/stop_detection')
 def stop_detection():
-    """Stop face mask detection"""
+    #Stop face mask detection
     global detection_active
     detection_active = False
     return jsonify({"status": "Detection stopped"})
 
-@app.route('/camera_status')
-def camera_status():
-    """Check camera status"""
-    camera = get_camera()
-    if camera and camera.isOpened():
-        return jsonify({"status": "Camera connected"})
-    else:
-        return jsonify({"status": "Camera not available"})
 
 if __name__ == '__main__':
-    # Create templates directory if it doesn't exist
     if not os.path.exists('templates'):
         os.makedirs('templates')
     
-    print("Starting Face Mask Detection Web App...")
-    print("Make sure you have created the HTML template in templates/index.html")
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, port=5000)
