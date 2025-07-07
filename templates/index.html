@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Face Mask Detector</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 
 
   
@@ -27,10 +31,38 @@
       <div class="upl-area">
         <div class="upl-icon">📸</div>
         <div class="upl-text">Drop your image here or click to upload</div>
-        <button clas="upl-button">Choose Image</button>
+        <button class="upl-button">Choose Image</button>
         <input type="file" alt="picture input" id="pic" class="finput" accept="image/*">
       </div>
     </div>
+    <div class="preview" id="preview">
+      <div style="text-align: center;">
+        <img id="previewimg" alt="Preview Image" class="previewimg">
+        <br><br>
+        <button class="analyse">Analyse Image</button>
+      </div>
+    </div>
+    <div class="loading" id="load">
+      <div class="spinner-grow" role="status">
+       <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    <div class="results" id="results">
+      <h3>Detection Results</h3>
+      <div class="result-area">
+        <div class="withmask">
+          <div class="withicon">😷</div>
+          <div class="withnum" id="withnum">0</div>
+          <div class="withicon">With mask</div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</body>  
+</html>
 
 
 
