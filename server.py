@@ -1,20 +1,30 @@
 from flask import Flask, render_template, Response, jsonify,request
+
 import os
 from datetime import datetime
 
 app = Flask(__name__)
 uploadf='static/uploads/'
 app.config['uploadf'] = uploadf
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
 
 os.makedirs(uploadf, exist_ok=True)
+detection_active = False
+current_imgpath = None
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/')
 def index():
-    """Main page"""
+    #main page
     return render_template('index.html')
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
+    global current_imgpath
     if 'file' not in request.files:
         return 'No file part'
     file = request.files['file']
