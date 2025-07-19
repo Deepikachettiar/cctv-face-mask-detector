@@ -26,18 +26,30 @@ def index():
 def upload_file():
     global current_imgpath
     if 'file' not in request.files:
-        return 'No file part'
+        return jsonify({'error': 'No file part'}), 400
     file = request.files['file']
 
     if file.filename == '':
-        return 'No selected file'
+        return jsonify({'error': 'No selected file'}), 400
 
+
+    if not allowed_file(file.filename):
+            return jsonify({'error': 'Invalid file type. Please upload PNG, JPG, JPEG, GIF, or WebP files.'}), 400
+        
+        
     if file:
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        filename = secure_filename(file.filename)
+        uname = f"{uuid.uuid4().hex}_{filename}"
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], uname)
         file.save(filepath)
-        return f'File uploaded! <br> <img src="/{filepath}" width="300">'
+        return jsonify({
+                'success': True,
+                'message': 'File uploaded successfully',
+                'filepath': filepath,
+                'filename': uname
+            })
     
-    return 'Something went wrong'
+    return jsonify({'error':f'upload failed:{str(e)}'}),500
 
 
 @app.route('/start_detection')
