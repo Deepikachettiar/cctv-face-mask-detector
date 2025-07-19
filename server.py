@@ -2,6 +2,9 @@ from flask import Flask, render_template, Response, jsonify,request
 
 import os
 from datetime import datetime
+import uuid
+from werkzeug.utils import secure_filename
+
 
 app = Flask(__name__)
 uploadf='static/uploads/'
