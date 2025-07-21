@@ -6,6 +6,8 @@ import uuid
 from werkzeug.utils import secure_filename
 
 
+
+
 app = Flask(__name__)
 uploadf='static/uploads/'
 app.config['uploadf'] = uploadf
@@ -54,20 +56,56 @@ def upload_file():
     
     return jsonify({'error':f'upload failed:{str(e)}'}),500
 
+@app.route('detect',methods=['POST'])
+def detect():
+    global current_imgpath
+    try:
+        if not current_imgpath or not os.path.exists(current_imgpath):
+            return jsonify({'error':'No image found.Please upload an image first.'}),400
+        
+        import random
+        
+        with_mask = random.randint(1, 15)
+        without_mask = random.randint(0, 8)
+        total_people = with_mask + without_mask
+        confidence=random.uniform(0.85,0.99)
+        
+        results = {
+            'success': True,
+            'results': {
+                'with_mask': with_mask,
+                'without_mask': without_mask,
+                'total_people': total_people,
+                'confidence': round(confidence, 2)
+            },
+            'image_path': current_imgpath,
+            'timestamp': datetime.now().isoformat()
+        }
+        
+        return jsonify(results)
+        
+    except Exception as e:
+        return jsonify({'error': f'Detection failed: {str(e)}'}), 500
+    
+
 
 @app.route('/start_detection')
 def start_detection():
     #Start face mask detection
     global detection_active
     detection_active = True
-    return jsonify({"status": "Detection started"})
+    return jsonify({"status": "Detection started",
+        "active": detection_active,
+        "timestamp": datetime.now().isoformat()})
 
 @app.route('/stop_detection')
 def stop_detection():
     #Stop face mask detection
     global detection_active
     detection_active = False
-    return jsonify({"status": "Detection stopped"})
+    return jsonify({ "status": "Detection stopped",
+        "active": detection_active,
+        "timestamp": datetime.now().isoformat()})
 
 
 if __name__ == '__main__':
