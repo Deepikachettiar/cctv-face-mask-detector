@@ -108,8 +108,38 @@ def stop_detection():
         "timestamp": datetime.now().isoformat()})
 
 
+@app.route('/clear_uploads')
+def clear_uploads():
+    global current_image_path
+    
+    try:
+        for filename in os.listdir(uploadf):
+            file_path = os.path.join(uploadf, filename)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+        
+        current_image_path = None
+        
+        return jsonify({
+            "status": "Uploads cleared",
+            "timestamp": datetime.now().isoformat()
+        })
+    except Exception as e:
+        return jsonify({'error': f'Clear failed: {str(e)}'}), 500
+    
+@app.errorhandler(413)
+def too_large(e):
+    return jsonify({'error': 'File too large. Maximum size is 16MB.'}), 413
+
+
+@app.errorhandler(404)
+def not_found(e):
+    return jsonify({'error':'Not found'}),404
+
 if __name__ == '__main__':
     if not os.path.exists('templates'):
         os.makedirs('templates')
-    
+    if not os.path.exists('static'):
+        os.makedirs('static')
+
     app.run(debug=True, port=5000)
