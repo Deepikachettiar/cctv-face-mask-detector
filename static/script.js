@@ -1,4 +1,4 @@
-// this file is java script
+// this file contains java script
 const fileInput = document.getElementById('pic');
 const previewSection = document.getElementById('preview');
 const previewImage = document.getElementById('previewImage');
@@ -49,6 +49,28 @@ async function analyzeImage() {
         alert('Please select an image first');
         return;
     }
+
+     // Show loading state
+    previewSection.style.display = 'none';
+    loadingSection.style.display = 'block';
+    resultsSection.style.display = 'none';
+
+    try {
+        // Upload file to Flask backend
+        const formdata = new FormData();
+        formdata.append('file', file);
+
+        const uploadResponse = await fetch('/upload', {
+            method: 'POST',
+            body: formdata
+        });
+
+         if (!uploadResponse.ok) {
+            throw new Error('Upload failed');
+        }
+
+        const uploadResult = await uploadResponse.text();
+        console.log('Upload result:', uploadResult);
 
      // Show loading state
     previewSection.style.display = 'none';
