@@ -1,4 +1,4 @@
-//this file is java script file
+// this file is java script
 const fileInput = document.getElementById('pic');
 const previewSection = document.getElementById('preview');
 const previewImage = document.getElementById('previewImage');
@@ -10,7 +10,9 @@ let detectionActive = false;
 let uplimgpath = null;
 
 
-fileInput.addEventListener('change', function(event) {
+fileInput.addEventListener('change', 
+    function(event) 
+    {
     const file = event.target.files[0];
     if (file) {
         // Validate file type
@@ -36,3 +38,19 @@ fileInput.addEventListener('change', function(event) {
         reader.readAsDataURL(file);
     }
 });
+
+
+
+
+
+async function analyzeImage() {
+    const file = fileInput.files[0];
+    if (!file) {
+        alert('Please select an image first');
+        return;
+    }
+
+     // Show loading state
+    previewSection.style.display = 'none';
+    loadingSection.style.display = 'block';
+    resultsSection.style.display = 'none';
