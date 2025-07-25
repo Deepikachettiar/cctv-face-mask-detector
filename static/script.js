@@ -72,7 +72,23 @@ async function analyzeImage() {
         const uploadResult = await uploadResponse.text();
         console.log('Upload result:', uploadResult);
 
-     // Show loading state
-    previewSection.style.display = 'none';
-    loadingSection.style.display = 'block';
-    resultsSection.style.display = 'none';
+        // Start detection
+        const startResponse = await fetch('/start_detection');
+        const startResult = await startResponse.json();
+        console.log('Detection started:', startResult);
+
+        // Simulate processing time and get results
+        await simulateDetection();
+
+        // Stop detection
+        const stopResponse = await fetch('/stop_detection');
+        const stopResult = await stopResponse.json();
+        console.log('Detection stopped:', stopResult);
+
+    } catch (error) {
+        console.error('Error during analysis:', error);
+        alert('Error analyzing image. Please try again.');
+        loadingSection.style.display = 'none';
+        previewSection.style.display = 'block';
+    }
+}
