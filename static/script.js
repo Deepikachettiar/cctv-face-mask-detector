@@ -92,3 +92,26 @@ async function analyzeImage() {
         previewSection.style.display = 'block';
     }
 }
+
+
+// Animate resultnum
+function animateNumbers() {
+    const numbers = document.querySelectorAll(' ');
+    numbers.forEach(number => {
+        const target = parseInt(number.textContent);
+        number.textContent = '0';
+        
+        const increment = target / 30;
+        let current = 0;
+        
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                number.textContent = target;
+                clearInterval(timer);
+            } else {
+                number.textContent = Math.floor(current);
+            }
+        }, 50);
+    });
+}
