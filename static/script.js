@@ -96,12 +96,12 @@ async function analyzeImage() {
 
 // Animate resultnum
 function animateNumbers() {
-    const numbers = document.querySelectorAll(' ');
+    const numbers = document.querySelectorAll('#withnum, #withoutnum, #totalnum');
     numbers.forEach(number => {
         const target = parseInt(number.textContent);
         number.textContent = '0';
         
-        const increment = target / 30;
+        const increment = target / 50;
         let current = 0;
         
         const timer = setInterval(() => {
