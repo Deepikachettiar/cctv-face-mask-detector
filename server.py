@@ -1,5 +1,4 @@
 from flask import Flask, render_template, Response, jsonify,request
-
 import os
 from datetime import datetime
 import uuid
@@ -27,6 +26,7 @@ def index():
     #main page
     return render_template('index.html')
 
+
 @app.route('/upload', methods=['POST'])
 def upload_file():
     global current_imgpath
@@ -41,9 +41,9 @@ def upload_file():
     if not allowed_file(file.filename):
             return jsonify({'error': 'Invalid file type. Please upload PNG, JPG, JPEG, GIF, or WebP files.'}), 400
         
-        
+ 
     if file:
-        filename = secure_filename(file.filename)
+        filename = secure_filename(file.filename) 
         uname = f"{uuid.uuid4().hex}_{filename}"
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], uname)
         file.save(filepath)
@@ -52,11 +52,10 @@ def upload_file():
                 'message': 'File uploaded successfully',
                 'filepath': filepath,
                 'filename': uname
-            })
-    
-    return jsonify({'error':f'upload failed:{str(e)}'}),500
+            })        
+    return jsonify({'error':f'upload failed'}),500
 
-@app.route('detect',methods=['POST'])
+@app.route('/detect',methods=['POST'])
 def detect():
     global current_imgpath
     try:
