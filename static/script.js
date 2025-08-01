@@ -124,5 +124,13 @@ async function simulateDetection() {
             document.getElementById('withoutMaskCount').textContent = withoutMask;
             document.getElementById('totalPeople').textContent = total;
             
-
-
+            // Show results
+            loadingSection.style.display = 'none';
+            resultsSection.style.display = 'block';
+            
+            // Animate numbers
+            animateNumbers();
+            resolve();
+        }, 3000);
+    });
+}
