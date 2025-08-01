@@ -92,9 +92,7 @@ async function analyzeImage() {
         previewSection.style.display = 'block';
     }
 }
-
-
-// Animate resultnum
+// Animate result numbers
 function animateNumbers() {
     const numbers = document.querySelectorAll('#withnum, #withoutnum, #totalnum');
     numbers.forEach(number => {
@@ -115,3 +113,16 @@ function animateNumbers() {
         }, 50);
     });
 }
+
+
+async function simulateDetection() {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            
+            // Update results
+            document.getElementById('withMaskCount').textContent = withMask;
+            document.getElementById('withoutMaskCount').textContent = withoutMask;
+            document.getElementById('totalPeople').textContent = total;
+            
+
+
