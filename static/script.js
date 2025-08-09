@@ -152,3 +152,15 @@ function resetApp() {
             });
     }
 }
+
+uploadArea.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    uploadArea.style.borderColor = 'rgba(255, 255, 255, 0.6)';
+    uploadArea.style.background = 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.15) 100%)';
+});
+
+uploadArea.addEventListener('dragleave', function(e) {
+    e.preventDefault();
+    uploadArea.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+    uploadArea.style.background = 'linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.1) 100%)';
+});
