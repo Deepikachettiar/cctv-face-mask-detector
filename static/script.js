@@ -134,3 +134,21 @@ async function simulateDetection() {
         }, 3000);
     });
 }
+
+function resetApp() {
+    previewSection.style.display = 'none';
+    loadingSection.style.display = 'none';
+    resultsSection.style.display = 'none';
+    fileInput.value = '';
+    uploadedImagePath = null;
+    
+    // Reset detection state
+    if (detectionActive) {
+        fetch('/stop_detection')
+            .then(response => response.json())
+            .then(result => {
+                console.log('Detection stopped:', result);
+                detectionActive = false;
+            });
+    }
+}
