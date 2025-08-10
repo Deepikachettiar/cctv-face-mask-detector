@@ -176,3 +176,7 @@ uploadArea.addEventListener('drop', function(e) {
         fileInput.dispatchEvent(new Event('change'));
     }
 });
+
+uploadArea.addEventListener('click', function() {
+    fileInput.click();
+});
